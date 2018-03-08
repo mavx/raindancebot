@@ -39,8 +39,8 @@ def message_contains(message, condition):
         'react': ''
     }
     print("Scanning for:", conditions.get(condition, 'N/A'))
-    print("Message to scan: {}".format(str(message.embeds)))
-    return conditions.get(condition, 'N/A') in str(message.embeds)
+    print("Message to scan: {}".format(str(message.embeds).lower())
+    return conditions.get(condition, 'N/A') in str(message.embeds).lower()
 
 def print_message(message):
     print("TurtleMessage:", message.content)
