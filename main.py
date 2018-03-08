@@ -16,7 +16,7 @@ TURTLERAINBOT_ID = '407753551859810304'
 client = discord.Client()
 
 async def notify(text):
-    print(text)
+    print("Notification message:", text)
     # if DISCORD_WEBHOOK:
     #     print("Notifying Discord..")
     #     requests.post(DISCORD_WEBHOOK, json={"content": text})
@@ -38,6 +38,8 @@ def message_contains(message, condition):
         'send_address': "send me your wallet address",
         'react': ''
     }
+    print("Scanning for:", conditions.get(condition, 'N/A'))
+    print("Message to scan: {}".format(str(message.embeds)))
     return conditions.get(condition, 'N/A') in str(message.embeds)
 
 def print_message(message):
@@ -74,6 +76,7 @@ async def on_message(message):
 
     # Wait for it to rain
     raining = False
+    print("Raining:", raining)
     while not raining:
         await asyncio.sleep(5)
         async for log in client.logs_from(message.channel, limit=2, reverse=True):
@@ -81,9 +84,11 @@ async def on_message(message):
                 raining = True
                 await notify("It's raining!")
                 print_message(log)
+    print("Raining:", raining)
 
     # Wait for the cue to send address
     address_requested = False
+    print("Address requested:", address_requested)
     while not address_requested:
         await asyncio.sleep(10)
         async for log in client.logs_from(message.channel, limit=2, reverse=True):
@@ -92,8 +97,10 @@ async def on_message(message):
                 await notify("Sending your address!")
                 await client.send_message(message.author, TURTLE_ADDRESS)
                 print_message(log)
+    print("Address requested:", address_requested)
 
     # Wait for reaction
+    print("Waiting for reaction...")
     private_message = await client.wait_for_message(timeout=15, author=message.author)
     print_message(private_message)
     regex = re.search(r"<\S{22,}>", message.content)
