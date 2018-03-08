@@ -25,11 +25,11 @@ async def notify(text):
         print("Notifying Slack..")
         requests.post(SLACK_WEBHOOK, json={"text": text})
 
-def extract_title(message):
-    return message.embeds[0].get('title', '').lower()
+# def extract_title(message):
+#     return message.embeds[0].get('title', '').lower()
 
-def extract_description(message):
-    return message.embeds[0].get('description', '').lower()
+# def extract_description(message):
+#     return message.embeds[0].get('description', '').lower()
 
 def message_contains(message, condition):
     conditions = {
@@ -38,7 +38,7 @@ def message_contains(message, condition):
         'send_address': "send me your wallet address",
         'react': ''
     }
-    return conditions.get(condition, 'N/A') in extract_title(message)
+    return conditions.get(condition, 'N/A') in str(message.embeds)
 
 def print_message(message):
     print("TurtleMessage:", message.content)
