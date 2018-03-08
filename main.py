@@ -5,7 +5,8 @@ import discord
 import asyncio
 
 TOKEN = os.getenv("DISCORD_TOKEN")
-WEBHOOK = os.getenv("DISCORD_RAINDANCE_WEBHOOK")
+DISCORD_WEBHOOK = os.getenv("DISCORD_RAINDANCE_WEBHOOK")
+SLACK_WEBHOOK = os.getenv("SLACK_RAINDANCE_WEBHOOK")
 SERVER_LIST = ['turtlecoin']
 
 client = discord.Client()
@@ -15,7 +16,11 @@ def is_targeted_message(message):
 
 def notify(text):
     print(text)
-    return requests.post(WEBHOOK, json={"content": text})
+    if DISCORD_WEBHOOK:
+        requests.post(DISCORD_WEBHOOK, json={"content": text})
+    
+    if SLACK_WEBHOOK:
+        requests.post(SLACK_WEBHOOK, json={"text": text})
 
 def extract_description(message):
     return message.embeds[0].get('description', '')
@@ -51,36 +56,21 @@ async def on_message(message):
             if message_contains(message, 'tut_tut'):
                 notify("It's gonna rain!")
 
-                # Wait for it to rain
-                await asyncio.sleep(10)
-                async for log in client.logs_from(message.channel, author=message.author, limit=5, reverse=True):
-                    if message_contains(message, 'raining'):
-                        notify("It's raining!")
+                # # Wait for it to rain
+                # await asyncio.sleep(10)
+                # async for log in client.logs_from(message.channel, author=message.author, limit=3, reverse=True):
+                #     if message_contains(message, 'raining'):
+                #         notify("It's raining!")
 
-                # Wait for the cue to send address
-                await asyncio.sleep(10)
-                async for log in client.logs_from(message.channel, author=message.author, limit=5, reverse=True):
-                    if message_contains(message, 'send_address'):
-                        notify("Alright, time to send your address!")
+                # # Wait for the cue to send address
+                # await asyncio.sleep(10)
+                # async for log in client.logs_from(message.channel, author=message.author, limit=3, reverse=True):
+                #     if message_contains(message, 'send_address'):
+                #         notify("Alright, time to send your address!")
 
-                # Wait for reaction
+                # # Wait for reaction
 
-                notify("Reacting to the rain lol.")
-
-
-    # if message.content.startswith('!test'):
-    #     counter = 0
-    #     tmp = await client.send_message(message.channel, 'Calculating messages...')
-    #     async for log in client.logs_from(message.channel, limit=100):
-    #         print(log.content)
-    #         if log.author == message.author:
-    #             counter += 1
-
-    #     await client.edit_message(tmp, 'You have {} messages.'.format(counter))
-    
-    # elif message.content.startswith('!sleep'):
-    #     await asyncio.sleep(5)
-    #     await client.send_message(message.channel, 'Done sleeping')
+                # notify("Reacting to the rain lol.")
     
     # elif message.content.startswith('$'):
     #     print("Message:", message.content)
