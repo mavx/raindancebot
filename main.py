@@ -105,7 +105,7 @@ async def on_message(message):
     print("Waiting for reaction...")
     private_message = await client.wait_for_message(timeout=15, author=message.author)
     print_message(private_message)
-    regex = re.search(r"<\S{22,}>", message.content)
+    regex = re.search(r"<\S{22,}>", private_message.content)
     if regex is not None:
         for emoji in elist:
             if str(emoji) == regex.group(0):
