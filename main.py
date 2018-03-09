@@ -107,7 +107,7 @@ async def on_message(message):
     print_message(private_message)
     regex = re.search(r"<\S{22,}>", private_message.content)
     if regex is not None:
-        for emoji in elist:
+        for emoji in emoji_list:
             if str(emoji) == regex.group(0):
                 await notify("Reacting to the rain lol.")
                 await bot.add_reaction(rain_message, emoji)
