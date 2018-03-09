@@ -34,7 +34,7 @@ async def notify(text):
 def message_contains(message, condition):
     conditions = {
         'tut_tut': 'tut tut',
-        'raining': "it's raining",
+        'raining': "it begins to rain",
         'send_address': "send me your wallet address",
         'react': ''
     }
