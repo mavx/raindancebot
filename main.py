@@ -1,9 +1,18 @@
 import os
 import re
+import logging
 
 import requests
 import discord
 import asyncio
+
+logging.basicConfig(
+    level=logging.DEBUG,
+    datefmt='%m-%d %H:%M',
+    filename='raindance.log',
+    filemode='a'
+)
+logger = logging.getLogger(__name__)
 
 TOKEN = os.getenv("DISCORD_TOKEN")
 # DISCORD_WEBHOOK = os.getenv("DISCORD_RAINDANCE_WEBHOOK")
@@ -17,13 +26,13 @@ client = discord.Client()
 
 
 async def notify(text):
-    print("Notification message:", text)
+    logger.debug("Notification message: {}".format(text))
     # if DISCORD_WEBHOOK:
-    #     print("Notifying Discord..")
+    #     logger.info("Notifying Discord..")
     #     requests.post(DISCORD_WEBHOOK, json={"content": text})
 
     if SLACK_WEBHOOK:
-        print("Notifying Slack..")
+        logger.info("Notifying Slack..")
         requests.post(SLACK_WEBHOOK, json={"text": text})
 
 
@@ -34,16 +43,16 @@ def message_contains(message, condition):
         'send_address': "send me your wallet address",
         'react': ''
     }
-    print("Scanning for:", conditions.get(condition, 'N/A'))
-    print("Message to scan: {}".format(str(message.embeds).lower()))
+    logger.info("Scanning for: {}".format(conditions.get(condition, 'N/A')))
+    logger.info("Message to scan: {}".format(str(message.embeds).lower()))
     return conditions.get(condition, 'N/A') in str(message.embeds).lower()
 
 
 def print_message(message):
-    print("TurtleMessage:", message.content)
-    print("Author:", message.author)
-    print("Embeds:", message.embeds)
-    print("ID:", message.id)
+    logger.debug("TurtleMessage: {}".format(message.content))
+    logger.debug("Author: {}".format(message.author))
+    logger.debug("Embeds: {}".format(message.embeds))
+    logger.debug("ID: {}".format(message.id))
 
 
 @client.event
@@ -64,7 +73,7 @@ async def on_message(message):
     emoji_list = message.server.emojis
 
     print_message(message)
-    print("Emojis:", emoji_list)
+    logger.debug("Emojis: {}".format(map(str, emoji_list)))
 
     # Check for rain    
     if not message_contains(message, 'tut_tut'):
@@ -75,22 +84,22 @@ async def on_message(message):
 
     # Wait for it to rain
     raining = False
-    print("Raining:", raining)
+    logger.debug("Raining: {}".format(raining))
     while not raining:
-        print("Checking in 5 seconds...")
+        logger.info("Checking in 5 seconds...")
         await asyncio.sleep(5)
         async for log in client.logs_from(message.channel, limit=2, reverse=True):
             if message_contains(log, 'raining') and (log.author == message.author):
                 raining = True
                 await notify("It's raining!")
                 print_message(log)
-    print("Raining:", raining)
+    logger.debug("Raining: {}".format(raining))
 
     # Wait for the cue to send address
     address_requested = False
-    print("Address requested:", address_requested)
+    logger.debug("Address requested: {}".format(address_requested))
     while not address_requested:
-        print("Checking in 10 seconds...")
+        logger.info("Checking in 10 seconds...")
         await asyncio.sleep(10)
         async for log in client.logs_from(message.channel, limit=2, reverse=True):
             if message_contains(log, 'send_address') and (log.author == message.author):
@@ -98,10 +107,10 @@ async def on_message(message):
                 await notify("Sending your address!")
                 await client.send_message(message.author, TURTLE_ADDRESS)
                 print_message(log)
-    print("Address requested:", address_requested)
+    logger.debug("Address requested: {}".format(address_requested))
 
     # Wait for reaction
-    print("Waiting for reaction...")
+    logger.info("Waiting for reaction...")
     private_message = await client.wait_for_message(timeout=15, author=message.author)
     print_message(private_message)
     regex = re.search(r"<\S{22,}>", private_message.content)
