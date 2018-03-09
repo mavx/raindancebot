@@ -7,7 +7,7 @@ import discord
 import asyncio
 
 logging.basicConfig(
-    level=logging.DEBUG,
+    level=logging.INFO,
     datefmt='%m-%d %H:%M',
     filename='raindance.log',
     filemode='a'
@@ -26,7 +26,7 @@ client = discord.Client()
 
 
 async def notify(text):
-    logger.debug("Notification message: {}".format(text))
+    logger.info("Notification message: {}".format(text))
     # if DISCORD_WEBHOOK:
     #     logger.info("Notifying Discord..")
     #     requests.post(DISCORD_WEBHOOK, json={"content": text})
@@ -49,10 +49,10 @@ def message_contains(message, condition):
 
 
 def print_message(message):
-    logger.debug("TurtleMessage: {}".format(message.content))
-    logger.debug("Author: {}".format(message.author))
-    logger.debug("Embeds: {}".format(message.embeds))
-    logger.debug("ID: {}".format(message.id))
+    logger.info("TurtleMessage: {}".format(message.content))
+    logger.info("Author: {}".format(message.author))
+    logger.info("Embeds: {}".format(message.embeds))
+    logger.info("ID: {}".format(message.id))
 
 
 @client.event
@@ -73,7 +73,7 @@ async def on_message(message):
     emoji_list = message.server.emojis
 
     print_message(message)
-    logger.debug("Emojis: {}".format(map(str, emoji_list)))
+    logger.info("Emojis: {}".format(map(str, emoji_list)))
 
     # Check for rain    
     if not message_contains(message, 'tut_tut'):
@@ -84,7 +84,7 @@ async def on_message(message):
 
     # Wait for it to rain
     raining = False
-    logger.debug("Raining: {}".format(raining))
+    logger.info("Raining: {}".format(raining))
     while not raining:
         logger.info("Checking in 5 seconds...")
         await asyncio.sleep(5)
@@ -93,11 +93,11 @@ async def on_message(message):
                 raining = True
                 await notify("It's raining!")
                 print_message(log)
-    logger.debug("Raining: {}".format(raining))
+    logger.info("Raining: {}".format(raining))
 
     # Wait for the cue to send address
     address_requested = False
-    logger.debug("Address requested: {}".format(address_requested))
+    logger.info("Address requested: {}".format(address_requested))
     while not address_requested:
         logger.info("Checking in 10 seconds...")
         await asyncio.sleep(10)
@@ -107,7 +107,7 @@ async def on_message(message):
                 await notify("Sending your address!")
                 await client.send_message(message.author, TURTLE_ADDRESS)
                 print_message(log)
-    logger.debug("Address requested: {}".format(address_requested))
+    logger.info("Address requested: {}".format(address_requested))
 
     # Wait for reaction
     logger.info("Waiting for reaction...")
