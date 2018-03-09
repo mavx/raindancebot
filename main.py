@@ -15,21 +15,17 @@ TURTLERAINBOT_ID = '407753551859810304'
 
 client = discord.Client()
 
+
 async def notify(text):
     print("Notification message:", text)
     # if DISCORD_WEBHOOK:
     #     print("Notifying Discord..")
     #     requests.post(DISCORD_WEBHOOK, json={"content": text})
-    
+
     if SLACK_WEBHOOK:
         print("Notifying Slack..")
         requests.post(SLACK_WEBHOOK, json={"text": text})
 
-# def extract_title(message):
-#     return message.embeds[0].get('title', '').lower()
-
-# def extract_description(message):
-#     return message.embeds[0].get('description', '').lower()
 
 def message_contains(message, condition):
     conditions = {
@@ -42,11 +38,13 @@ def message_contains(message, condition):
     print("Message to scan: {}".format(str(message.embeds).lower()))
     return conditions.get(condition, 'N/A') in str(message.embeds).lower()
 
+
 def print_message(message):
     print("TurtleMessage:", message.content)
     print("Author:", message.author)
     print("Embeds:", message.embeds)
     print("ID:", message.id)
+
 
 @client.event
 async def on_ready():
@@ -55,13 +53,14 @@ async def on_ready():
     print(client.user.id)
     print('______')
 
+
 @client.event
 async def on_message(message):
     if (message.channel.id != RAINDANCE_CHANNEL_ID) or (message.author.id != TURTLERAINBOT_ID):
         return
-    elif not message.embeds: # Check for attachments
+    elif not message.embeds:  # Check for attachments
         return
-    
+
     emoji_list = message.server.emojis
 
     print_message(message)
@@ -70,7 +69,7 @@ async def on_message(message):
     # Check for rain    
     if not message_contains(message, 'tut_tut'):
         return
-    
+
     # OK, it's gonna rain
     await notify("It's gonna rain!")
 
