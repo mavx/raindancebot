@@ -112,7 +112,7 @@ async def on_message(message):
                 await notify("Reacting to the rain lol.")
                 await bot.add_reaction(rain_message, emoji)
     else:
-        notify("Emoji not found, GG.")
+        await notify("Emoji not found, GG.")
 
 
 client.run(TOKEN, bot=False)
