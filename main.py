@@ -110,7 +110,7 @@ async def on_message(message):
         for emoji in emoji_list:
             if str(emoji) == regex.group(0):
                 await notify("Reacting to the rain lol.")
-                await bot.add_reaction(rain_message, emoji)
+                await client.add_reaction(rain_message, emoji)
     else:
         await notify("Emoji not found, GG.")
 
