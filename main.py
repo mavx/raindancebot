@@ -88,7 +88,7 @@ async def on_message(message):
     while not raining:
         logger.info("Checking in 5 seconds...")
         await asyncio.sleep(5)
-        async for log in client.logs_from(message.channel, limit=2, reverse=True):
+        async for log in client.logs_from(message.channel, limit=5, reverse=True):
             if message_contains(log, 'raining') and (log.author == message.author):
                 raining = True
                 await notify("It's raining!")
@@ -101,7 +101,7 @@ async def on_message(message):
     while not address_requested:
         logger.info("Checking in 10 seconds...")
         await asyncio.sleep(10)
-        async for log in client.logs_from(message.channel, limit=2, reverse=True):
+        async for log in client.logs_from(message.channel, limit=5, reverse=True):
             if message_contains(log, 'send_address') and (log.author == message.author):
                 address_requested = True
                 await notify("Sending your address!")
