@@ -71,13 +71,13 @@ async def on_message(message):
         return
 
     print_message(message)
-    logger.info("Emojis: {}".format(map(str, emoji_list)))
 
     # Check for rain    
     if not message_contains(message, 'tut_tut'):
         return
 
     emoji_list = message.server.emojis
+    logger.info("Emojis: {}".format(map(str, emoji_list)))
 
     # OK, it's gonna rain
     await notify("It's gonna rain!")
