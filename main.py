@@ -70,14 +70,14 @@ async def on_message(message):
     elif not message.embeds:  # Check for attachments
         return
 
-    emoji_list = message.server.emojis
-
     print_message(message)
     logger.info("Emojis: {}".format(map(str, emoji_list)))
 
     # Check for rain    
     if not message_contains(message, 'tut_tut'):
         return
+
+    emoji_list = message.server.emojis
 
     # OK, it's gonna rain
     await notify("It's gonna rain!")
