@@ -6,6 +6,7 @@ import requests
 import discord
 import asyncio
 
+
 logging.basicConfig(
     level=logging.INFO,
     datefmt='%m-%d %H:%M',
@@ -14,13 +15,15 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
+
 TOKEN = os.getenv("DISCORD_TOKEN")
 # DISCORD_WEBHOOK = os.getenv("DISCORD_RAINDANCE_WEBHOOK")
 SLACK_WEBHOOK = os.getenv("SLACK_RAINDANCE_WEBHOOK")
 TURTLE_ADDRESS = os.getenv("TURTLE_ADDRESS", "")
-TURTLECOIN_SERVER_ID = '388915017187328002'
-RAINDANCE_CHANNEL_ID = '407757902695235584'
-TURTLERAINBOT_ID = '407753551859810304'
+TURTLECOIN_SERVER_ID = '388915017187328002' # Suggest to store in separate file?
+RAINDANCE_CHANNEL_ID = '407757902695235584' # Suggest to store in separate file?
+TURTLERAINBOT_ID = '407753551859810304' # Suggest to store in separate file?
+
 
 client = discord.Client()
 
