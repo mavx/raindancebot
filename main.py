@@ -1,14 +1,13 @@
 import os
 import re
 import logging
-
 import requests
 import discord
 import asyncio
 
 logging.basicConfig(
     level=logging.INFO,
-    datefmt='%m-%d %H:%M',
+    datefmt='%y-%m-%d %H:%M',
     filename='raindance.log',
     filemode='a'
 )
